@@ -23,13 +23,9 @@ angular
         templateUrl: 'views/main.html',
         controller: 'MainCtrl'
       })
-      .when('/tool1', {
-        templateUrl: 'views/tool1.html',
-        controller: 'Tool1Ctrl'
-      })
-      .when('/tool2', {
-        templateUrl: 'views/tool2.html',
-        controller: 'Tool2Ctrl'
+      .when('/uniques', {
+        templateUrl: 'views/uniques.html',
+        controller: 'UniquesCtrl'
       })
       .otherwise({
         redirectTo: '/'
