@@ -8,18 +8,21 @@
  * Controller of the rtbToolsApp
  */
 angular.module('rtbToolsApp')
-  .controller('UniquesCtrl', function ($scope) {
+  .controller('UniquesCtrl', function ($scope, CurrentPageService) {
+
+    CurrentPageService.navIndex = 0;
 
     $scope.uniquesModel = '';
     $scope.total = 0;
     $scope.totalUniques = 0;
 
     function normalize(name) {
-      return name.toLowerCase();
+      var normalized = name.toLowerCase().trim();
+      return normalized;
     }
 
     $scope.update = function() {
-      var uniquesList = $scope.uniquesModel.split('\n');
+      var uniquesList = $scope.uniquesModel.trim().split('\n');
       $scope.total = uniquesList.length;
 
       var uniqueCounts = {};

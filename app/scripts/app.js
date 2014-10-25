@@ -30,4 +30,7 @@ angular
       .otherwise({
         redirectTo: '/'
       });
+  })
+  .service('CurrentPageService', function() {
+    this.navIndex = 0;
   });
