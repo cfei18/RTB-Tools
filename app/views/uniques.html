@@ -8,6 +8,18 @@
         <div class="result">
             Total: <strong>{{ total }}</strong><br/>
             Total Uniques: <strong>{{ totalUniques }}</strong><br/>
+            <br/>
+
+            Duplicates:<br/>
+            <span ng-repeat="item in duplicates">
+                {{item}}<br/>
+            </span>
+            <br/><br/>
+
+            Full List:<br/>
+            <span ng-repeat="item in uniques">
+                {{item}}<br/>
+            </span>
         </div>
     </div>
 
