@@ -23,17 +23,46 @@ angular.module('rtbToolsApp')
       return normalized;
     }
 
+    function isCategory(name) {
+      return name && name.startsWith('==') && name.endsWith('==');
+    }
+
     $scope.update = function() {
-      var i, name;
+      var i, name, lastCategory;
       var uniquesList = $scope.uniquesModel.trim().split('\n');
-      $scope.total = uniquesList.length;
+      $scope.total = 0;
 
       var uniqueCounts = {};
+
       for(i = 0; i < uniquesList.length; i++) {
         name = uniquesList[i];
+        name = name.trim();
+
+        if(!name || !name.length) {
+          continue;
+        }
+
+        if(isCategory(name)) {
+          lastCategory = name.replace(new RegExp('^=='), '').replace(new RegExp('==$'), '');
+          continue;
+        }
+
         name = normalize(name);
 
-        uniqueCounts[name] = 1 + (uniqueCounts[name] || 0);
+        var obj = uniqueCounts[name];
+        if(!obj) {
+          obj = uniqueCounts[name] = {
+            count: 0,
+            categories: []
+          };
+        }
+
+        obj.count++;
+        if(lastCategory) {
+          obj.categories.push(lastCategory);
+        }
+
+        $scope.total++;
       }
 
       var uniqueKeys = Object.keys(uniqueCounts);
@@ -43,11 +72,18 @@ angular.module('rtbToolsApp')
 
       for(i = 0; i < uniqueKeys.length; i++) {
         name = uniqueKeys[i];
-        if(uniqueCounts[name] > 1) {
+        if(uniqueCounts[name].count > 1) {
           $scope.duplicates.push(name);
         }
 
-        $scope.uniques.push(name + ' (' + uniqueCounts[name] + ')');
+        var uniquesObj = uniqueCounts[name];
+
+        var item = name + ' (' + uniquesObj.count + ')';
+        if(uniquesObj.categories && uniquesObj.categories.length) {
+          item += ' (' + uniquesObj.categories.join(', ') + ')';
+        }
+
+        $scope.uniques.push(item);
       }
 
       $scope.duplicates.sort(function(a, b){
