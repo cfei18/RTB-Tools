@@ -36,15 +36,18 @@ angular.module('rtbToolsApp')
         uniqueCounts[name] = 1 + (uniqueCounts[name] || 0);
       }
 
-      $scope.uniques = Object.keys(uniqueCounts);
+      var uniqueKeys = Object.keys(uniqueCounts);
+      $scope.uniques = [];
       $scope.duplicates = [];
-      $scope.totalUniques = $scope.uniques.length;
+      $scope.totalUniques = uniqueKeys.length;
 
-      for(i = 0; i < $scope.uniques.length; i++) {
-        name = $scope.uniques[i];
+      for(i = 0; i < uniqueKeys.length; i++) {
+        name = uniqueKeys[i];
         if(uniqueCounts[name] > 1) {
           $scope.duplicates.push(name);
         }
+
+        $scope.uniques.push(name + ' (' + uniqueCounts[name] + ')');
       }
 
       $scope.duplicates.sort(function(a, b){

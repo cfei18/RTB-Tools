@@ -5,22 +5,25 @@
                   ng-model="uniquesModel"
                   ng-change="update()"></textarea>
 
+        <br/>
+
         <div class="result">
             Total: <strong>{{ total }}</strong><br/>
             Total Uniques: <strong>{{ totalUniques }}</strong><br/>
             <br/>
 
-            Duplicates:<br/>
+            <strong>Duplicates:</strong><br/>
             <span ng-repeat="item in duplicates">
                 {{item}}<br/>
             </span>
-            <br/><br/>
+            <br/>
 
-            Full List:<br/>
+            <strong>Full List:</strong><br/>
             <span ng-repeat="item in uniques">
                 {{item}}<br/>
             </span>
         </div>
+        <br/>
     </div>
 
 </div>
