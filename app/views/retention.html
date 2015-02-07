@@ -1,0 +1,20 @@
+<div class="row">
+    <h1>Retention Tool:</h1>
+    <div class="unique-content">
+        <textarea class="unique-text"
+                  ng-model="retentionModel"
+                  ng-change="update()"></textarea>
+
+        <br/>
+
+        <div class="result">
+            <span ng-repeat="item in result.conversionsByStep">
+                {{item}}<br/>
+            </span>
+            <br/>
+        </div>
+        <br/>
+    </div>
+
+</div>
+

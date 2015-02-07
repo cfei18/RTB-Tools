@@ -8,7 +8,7 @@
  * Controller of the rtbToolsApp
  */
 angular.module('rtbToolsApp')
-  .controller('UniquesCtrl', function ($scope, CurrentPageService) {
+  .controller('UniquesCtrl', function ($scope, CurrentPageService, StringUtils) {
 
     CurrentPageService.navIndex = 0;
 
@@ -17,15 +17,6 @@ angular.module('rtbToolsApp')
     $scope.totalUniques = 0;
     $scope.duplicates = [];
     $scope.uniques = [];
-
-    function normalize(name) {
-      var normalized = name.toLowerCase().trim();
-      return normalized;
-    }
-
-    function isCategory(name) {
-      return name && name.startsWith('==') && name.endsWith('==');
-    }
 
     $scope.update = function() {
       var i, name, lastCategory;
@@ -42,12 +33,12 @@ angular.module('rtbToolsApp')
           continue;
         }
 
-        if(isCategory(name)) {
+        if(StringUtils.isCategory(name)) {
           lastCategory = name.replace(new RegExp('^=='), '').replace(new RegExp('==$'), '');
           continue;
         }
 
-        name = normalize(name);
+        name = StringUtils.normalize(name);
 
         var obj = uniqueCounts[name];
         if(!obj) {

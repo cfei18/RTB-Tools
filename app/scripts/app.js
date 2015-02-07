@@ -27,6 +27,10 @@ angular
         templateUrl: 'views/uniques.html',
         controller: 'UniquesCtrl'
       })
+      .when('/retention', {
+        templateUrl: 'views/retention.html',
+        controller: 'RetentionCtrl'
+      })
       .otherwise({
         redirectTo: '/'
       });
