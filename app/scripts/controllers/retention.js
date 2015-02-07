@@ -71,7 +71,7 @@ angular.module('rtbToolsApp')
     }
 
     function deriveResults() {
-      var i,j;
+      var i, j, category;
 
       var totalMembers = 0,
           conversions = {};
@@ -79,7 +79,7 @@ angular.module('rtbToolsApp')
       var numCategories = $scope.result.categories.length;
 
       for(i = 0; i < numCategories; i++) {
-        var category = $scope.result.categories[i];
+        category = $scope.result.categories[i];
         totalMembers += category.members.length;
 
         console.log('category', category);
@@ -102,7 +102,7 @@ angular.module('rtbToolsApp')
       var conversionMembers = Object.keys(conversions);
       console.log('conversions', conversions);
       for(i = 0; i < numCategories; i++) {
-        var category = $scope.result.categories[i];
+        category = $scope.result.categories[i];
         var step = conversionsByStep[i];
         if(!step) {
           step = conversionsByStep[i] = {
