@@ -1,5 +1,12 @@
 'use strict';
 
+/**
+ * @ngdoc function
+ * @name rtbToolsApp.controller:AboutCtrl
+ * @description
+ * # AboutCtrl
+ * Controller of the rtbToolsApp
+ */
 angular.module('rtbToolsApp')
   .controller('RetentionCtrl', function ($scope, CurrentPageService, StringUtils) {
 
@@ -22,12 +29,12 @@ angular.module('rtbToolsApp')
 
     function parseInput() {
       var i, name, lastCategory;
-      var uniquesList = $scope.retentionModel.trim().split('\n');
+      var lines = $scope.retentionModel.trim().split('\n');
 
       var categories = {};
 
-      for(i = 0; i < uniquesList.length; i++) {
-        name = uniquesList[i];
+      for(i = 0; i < lines.length; i++) {
+        name = lines[i];
         name = name.trim();
 
         if(!name || !name.length) {
@@ -35,7 +42,7 @@ angular.module('rtbToolsApp')
         }
 
         if(StringUtils.isCategory(name)) {
-          lastCategory = name.replace(new RegExp('^=='), '').replace(new RegExp('==$'), '');
+          lastCategory = name.replace(new RegExp('^=='), '').replace(new RegExp('==$'), '').trim();
           categories[lastCategory] = {
             name: lastCategory,
             members: []
@@ -46,16 +53,21 @@ angular.module('rtbToolsApp')
 
         if(i === 0) {
           // First line has gotta be a category
-          return;
+          continue;
         }
 
         name = StringUtils.normalize(name);
 
         var category = categories[lastCategory];
         category.members.push(name);
-
-        return categories;
       }
+
+      var categoryList = [];
+      for(var key in categories) {
+        categoryList.push(categories[key]);
+      }
+
+      return categoryList;
     }
 
     function deriveResults() {
@@ -70,14 +82,17 @@ angular.module('rtbToolsApp')
         var category = $scope.result.categories[i];
         totalMembers += category.members.length;
 
+        console.log('category', category);
         for(j = 0; j < category.members.length; j++) {
           var member = category.members[j];
           var conversion = conversions[member];
-          if(!conversion) {
-            conversion = conversions[member] = [];
-          }
 
-          if(conversion.length === j) {
+          if((!conversion && i === 0) || conversion && conversion.length === i) {
+            if(!conversion) {
+              conversion = conversions[member] = [];
+            }
+
+            console.log('conversion', category.name, member);
             conversion.push(category.name);
           }
         }
@@ -85,20 +100,39 @@ angular.module('rtbToolsApp')
 
       var conversionsByStep = [];
       var conversionMembers = Object.keys(conversions);
+      console.log('conversions', conversions);
       for(i = 0; i < numCategories; i++) {
-        for(j = 0; j < conversionMembers.length; j++) {
-          var stepList = conversions[j];
-          if(stepList >= i) {
-            var numConversionsForStep = conversionsByStep[i];
-            if(!numConversionsForStep) {
-              conversionsByStep[i] = 0;
-            }
+        var category = $scope.result.categories[i];
+        var step = conversionsByStep[i];
+        if(!step) {
+          step = conversionsByStep[i] = {
+            name: category.name,
+            count: 0,
+            totalRate: 0,
+            previousRate: 0
+          };
+        }
 
-            conversionsByStep[i]++;
+        for(j = 0; j < conversionMembers.length; j++) {
+          var conversionMember = conversionMembers[j];
+          var stepList = conversions[conversionMember];
+          console.log('steps', stepList);
+          if(stepList.length > i) {
+            conversionsByStep[i].count++;
           }
+        }
+
+        if(i > 0 && step) {
+          var firstStep = conversionsByStep[0];
+          var previousStep = conversionsByStep[i-1];
+
+          step.totalRate = step.count / firstStep.count;
+          step.previousRate = step.count / previousStep.count;
         }
       }
 
       $scope.result.conversionsByStep = conversionsByStep;
     }
+
+    $scope.update();
   });

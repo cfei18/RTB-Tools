@@ -9,7 +9,13 @@
 
         <div class="result">
             <span ng-repeat="item in result.conversionsByStep">
-                {{item}}<br/>
+                <strong>{{item.name}}:</strong><br/>
+                <div class="indent">
+                    Count who completed all steps up to this point : {{item.count}} <br/>
+                    Retention rate from previous step               : {{item.previousRate}}<br/>
+                    Retention rate from first step                 : {{item.totalRate}}
+                </div>
+                <br/>
             </span>
             <br/>
         </div>

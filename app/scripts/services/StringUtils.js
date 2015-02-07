@@ -1,5 +1,12 @@
 'use strict';
 
+/**
+ * @ngdoc function
+ * @name rtbToolsApp.controller:AboutCtrl
+ * @description
+ * # AboutCtrl
+ * Controller of the rtbToolsApp
+ */
 angular.module('rtbToolsApp')
   .service('StringUtils', function() {
     function normalize(name) {
